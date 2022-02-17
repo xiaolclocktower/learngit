@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- 发大镜案例，鼠标移入时左边出现对应方框的放大图片 -->
+    <style>
+        *{margin: 0;padding: 0;}
+        #small{width: 571px;height: 800px;border: 1px black solid;
+                position: relative;top:30px;left: 30px;}
+        #small img{width: 100%;height: 100%;}
+        #mask {width: 200px;height: 200px;background-color: white;opacity: 0.5;
+                /* 写个透明度兼容 */
+                filter: alpha(opacity= 50);border-radius: 50%;
+                /* 让madk位置是相对于small */
+                position: absolute;left: 0;top: 0;display: none; }
+                /* big和mask的比例要与bigPic和samll的比例一致 */
+        #big{width:600px;height:600px;border: 1px black solid;
+            left: 620px;top:30px;position: absolute;overflow: hidden;display: none;border-radius: 50%;}
+        #bigPic{position: absolute;top: 0px;left: 0px;width: 1713x;height: 2400px;}
+    </style>
+    <script>
+        window.onload = function(){
+            var oSmall = document.getElementById("small");
+            var oMask = document.getElementById("mask"); 
+            var oBig = document.getElementById("big");
+            var oPic = document.getElementById("bigPic");
+
+            oSmall.onmouseover = function(){
+                oMask.style.display = "block";
+                oBig.style.display = "block";
+            }
+
+            oSmall.onmouseout = function(){
+                oMask.style.display = "none";
+                oBig.style.display = "none";
+            }
+
+            oSmall.onmousemove = function(ev){
+                var e = ev || window.event;
+                // 方块罩的移动，鼠标在中间
+                var x = e.clientX - oSmall.offsetLeft- 100;
+                var y = e.clientY - oSmall.offsetTop - 100;
+                /* 限制方块罩的移动范围只能在小图内 253-100=153;450-100 = 350*/
+                if(x < 0){x = 0;}
+                if(x > 371){x = 371;}
+                if(y < 0){y = 0;}
+                if(y > 600){y = 600;}
+
+                oMask.style.left = x + "px";
+                oMask.style.top = y + "px";
+
+                oPic.style.left = -3 * x +"px";
+                oPic.style.top = -3 * y + "px";
+            }
+
+           
+        }
+    </script>
+</head>
+<body>
+    <div id="small">
+        <img src="nishang.jpg" alt="">
+        <div id="mask"></div>
+    </div>
+    <div id="big">
+        <img src="nishang.jpg" id="bigPic">
+    </div>
+</body>
+</html>
